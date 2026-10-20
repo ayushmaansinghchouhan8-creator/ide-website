@@ -276,11 +276,22 @@
         return jsonRes(200, { ok: true, path: normalize(body.path) });
       }
       if (route === "/api/run" && method === "POST") {
-        return jsonRes(200, {
-          stdout: "",
-          stderr: "Node execution is not available in the hosted version. Switch the Run mode to Browser.",
-          code: null
-        });
+        const p = normalize(body.path);
+        if (fs.files[p] === undefined) return jsonRes(404, { error: "File not found" });
+        try {
+          const res = await realFetch("https://wandbox.org/api/compile.json", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ code: fs.files[p], compiler: "nodejs-20.17.0" })
+          });
+          const data = await res.json();
+          const stdout = data.program_output || data.program_message || "";
+          const stderr = [data.program_error, data.compiler_error, data.compiler_message].filter(Boolean).join("\n");
+          const exitCode = data.status === "0" ? 0 : (data.status === undefined ? null : Number(data.status));
+          return jsonRes(200, { stdout, stderr, code: exitCode });
+        } catch (e) {
+          return jsonRes(200, { stdout: "", stderr: "Node execution failed: " + (e && e.message ? e.message : e), code: null });
+        }
       }
       return jsonRes(404, { error: "Unknown route " + route });
     } catch (err) {
@@ -306,9 +317,7 @@
   function wireWebExtras() {
     const modeSelect = document.getElementById("runMode");
     if (modeSelect) {
-      [...modeSelect.options].forEach((o) => { if (o.value === "node") o.remove(); });
-      modeSelect.value = "browser";
-      localStorage.setItem("jside.runMode", "browser");
+      modeSelect.value = localStorage.getItem("jside.runMode") || "browser";
     }
 
     const exportBtn = document.getElementById("exportBtn");
