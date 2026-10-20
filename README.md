@@ -17,16 +17,13 @@ directly in your browser, with an optional Node.js execution mode.
 Full version (Node + browser):
 
 ```
-npm install
-npm start
-# http://127.0.0.1:4173
+https://ayushmaansinghchouhan8-creator.github.io/ide-website/
 ```
 
 Browser-only (static) version:
 
 ```
-npm run web
-# http://127.0.0.1:4180
+https://ayushmaansinghchouhan8-creator.github.io/ide-website/
 ```
 
 ## Project layout
