@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>js-ide — browser JavaScript IDE</title>
+  <meta name="description" content="A lightweight in-browser JavaScript IDE with a Monaco editor, file tree, tabs, and a sandboxed browser runner." />
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .root-badge {
+      flex: 1;
+      max-width: 640px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      color: #9a9a9a;
+    }
+    .root-badge .pill {
+      border: 1px solid #3c3c3c;
+      border-radius: 999px;
+      padding: 4px 10px;
+      background: #1b1b1c;
+      color: #bdbdbd;
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <header class="topbar">
+      <div class="brand">
+        <span class="logo">JS</span>
+        <span class="brand-name">js-ide</span>
+      </div>
+
+      <div class="root-badge">
+        <span class="pill">Workspace: stored in your browser</span>
+        <span>Export to download your files.</span>
+      </div>
+
+      <div class="root-box" style="display:none">
+        <input id="rootInput" class="root-input" />
+        <button id="openBtn" class="btn"></button>
+      </div>
+
+      <div class="actions">
+        <select id="runMode" class="mode-select" title="Runs in the browser sandbox">
+          <option value="browser">Browser</option>
+        </select>
+        <button id="runBtn" class="btn btn-run" title="Save & run the active file (Ctrl+Enter)">
+          <span class="play">&#9654;</span> Run
+        </button>
+        <button id="saveBtn" class="btn" title="Save (Ctrl+S)">Save</button>
+        <button id="exportBtn" class="btn" title="Download all files as a JSON project">Export</button>
+        <button id="importBtn" class="btn" title="Import files from your computer">Import</button>
+        <input id="importInput" type="file" multiple hidden />
+      </div>
+    </header>
+
+    <div class="main">
+      <aside class="sidebar">
+        <div class="panel-head">
+          <span>Explorer</span>
+          <div class="panel-tools">
+            <button id="newFileBtn" class="icon-btn" title="New file">+</button>
+            <button id="newFolderBtn" class="icon-btn" title="New folder">&#128193;</button>
+            <button id="refreshBtn" class="icon-btn" title="Refresh">&#8635;</button>
+            <button id="resetBtn" class="icon-btn" title="Reset workspace to starter files">&#8634;</button>
+          </div>
+        </div>
+        <div id="tree" class="tree"></div>
+      </aside>
+
+      <section class="editor-wrap">
+        <div id="tabs" class="tabs"></div>
+        <div id="editor" class="editor"></div>
+        <div id="welcome" class="welcome">
+          <h1>js-ide</h1>
+          <p>Pick a <code>.js</code> file and hit <strong>Run</strong> to execute it in a sandboxed browser tab.</p>
+          <p class="hint">Files are saved in this browser. Use <strong>Export</strong> to download them, <strong>Import</strong> to load your own.</p>
+        </div>
+      </section>
+
+      <section id="consolePanel" class="console">
+        <div class="panel-head">
+          <span>Console</span>
+          <div class="panel-tools">
+            <span id="runStatus" class="status"></span>
+            <button id="clearConsoleBtn" class="icon-btn" title="Clear console">&#10005;</button>
+            <button id="toggleConsoleBtn" class="icon-btn" title="Collapse console">&#9660;</button>
+          </div>
+        </div>
+        <div id="browserPreview" class="browser-preview hidden">
+          <div class="preview-head">
+            <span>Live preview</span>
+            <button id="reloadPreviewBtn" class="icon-btn" title="Re-run in preview">&#8635;</button>
+            <button id="closePreviewBtn" class="icon-btn" title="Hide preview">&#10005;</button>
+          </div>
+          <iframe id="previewFrame" class="preview-frame" sandbox="allow-scripts allow-modals allow-forms allow-popups" title="Browser output"></iframe>
+        </div>
+        <pre id="consoleOut" class="console-out"></pre>
+      </section>
+    </div>
+
+    <div id="toast" class="toast"></div>
+  </div>
+
+  <script src="vs/loader.js"></script>
+  <script src="monaco-env.js"></script>
+  <script src="fs-shim.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
