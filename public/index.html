@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>js-ide</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <div id="app">
+    <header class="topbar">
+      <div class="brand">
+        <span class="logo">JS</span>
+        <span class="brand-name">js-ide</span>
+      </div>
+
+      <div class="root-box">
+        <input id="rootInput" class="root-input" spellcheck="false" placeholder="C:\path\to\your\project" />
+        <button id="openBtn" class="btn" title="Open this folder as workspace">Open</button>
+      </div>
+
+      <div class="actions">
+        <select id="runMode" class="mode-select" title="Where to run the code">
+          <option value="browser">Browser</option>
+          <option value="node">Node</option>
+        </select>
+        <button id="runBtn" class="btn btn-run" title="Save & run the active file (Ctrl+Enter)">
+          <span class="play">&#9654;</span> Run
+        </button>
+        <button id="saveBtn" class="btn" title="Save (Ctrl+S)">Save</button>
+      </div>
+    </header>
+
+    <div class="main">
+      <aside class="sidebar">
+        <div class="panel-head">
+          <span>Explorer</span>
+          <div class="panel-tools">
+            <button id="newFileBtn" class="icon-btn" title="New file">+</button>
+            <button id="newFolderBtn" class="icon-btn" title="New folder">&#128193;</button>
+            <button id="refreshBtn" class="icon-btn" title="Refresh">&#8635;</button>
+          </div>
+        </div>
+        <div id="tree" class="tree"></div>
+      </aside>
+
+      <section class="editor-wrap">
+        <div id="tabs" class="tabs"></div>
+        <div id="editor" class="editor"></div>
+        <div id="welcome" class="welcome">
+          <h1>js-ide</h1>
+          <p>Open a folder, pick a <code>.js</code> file, choose <strong>Browser</strong> or <strong>Node</strong>, then hit <strong>Run</strong>.</p>
+          <p class="hint">Browser mode runs code that needs <code>document</code>, <code>window</code>, <code>alert</code>, etc. Node mode runs backend code with <code>require</code>.</p>
+        </div>
+      </section>
+
+      <section id="consolePanel" class="console">
+        <div class="panel-head">
+          <span>Console</span>
+          <div class="panel-tools">
+            <span id="runStatus" class="status"></span>
+            <button id="clearConsoleBtn" class="icon-btn" title="Clear console">&#10005;</button>
+            <button id="toggleConsoleBtn" class="icon-btn" title="Collapse console">&#9660;</button>
+          </div>
+        </div>
+        <div id="browserPreview" class="browser-preview hidden">
+          <div class="preview-head">
+            <span>Live preview</span>
+            <button id="reloadPreviewBtn" class="icon-btn" title="Re-run in preview">&#8635;</button>
+            <button id="closePreviewBtn" class="icon-btn" title="Hide preview">&#10005;</button>
+          </div>
+          <iframe id="previewFrame" class="preview-frame" sandbox="allow-scripts allow-modals allow-forms allow-popups" title="Browser output"></iframe>
+        </div>
+        <pre id="consoleOut" class="console-out"></pre>
+      </section>
+    </div>
+
+    <div id="toast" class="toast"></div>
+  </div>
+
+  <script src="/vs/loader.js"></script>
+  <script src="/monaco-env.js"></script>
+  <script src="/app.js"></script>
+</body>
+</html>
